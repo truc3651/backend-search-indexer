@@ -1,7 +1,3 @@
-# backend-search-indexer
-
-A Kafka consumer that indexes user and post data into OpenSearch, enabling full-text search across the social app.
-
 ## Why this exists
 
 The social app stores users in PostgreSQL and posts in Cassandra. Neither supports full-text search well. This service bridges that gap by consuming change events from Kafka and maintaining OpenSearch indices that power user search (by full name) and post search (by content).
