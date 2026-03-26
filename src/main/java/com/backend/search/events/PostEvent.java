@@ -1,5 +1,7 @@
 package com.backend.search.events;
 
+import java.time.Instant;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
@@ -21,5 +23,7 @@ public class PostEvent {
     private String postId;
     private String content;
     private String visibility;
+    private Instant createdAt;
+    private Instant updatedAt;
   }
 }

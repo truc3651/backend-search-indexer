@@ -39,7 +39,6 @@ indexer:
     post-created: postCreated
     post-updated: postUpdated
     post-deleted: postDeleted
-    dead-letter: deadLetters
   retry:
     max-attempts: ${INDEXER_RETRY_MAX_ATTEMPTS:10}
     initial-interval-ms: ${INDEXER_RETRY_INITIAL_INTERVAL:1000}

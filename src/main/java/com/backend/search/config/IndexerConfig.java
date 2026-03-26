@@ -18,7 +18,6 @@ public class IndexerConfig {
     private String postCreated;
     private String postUpdated;
     private String postDeleted;
-    private String deadLetter;
   }
 
   @Data

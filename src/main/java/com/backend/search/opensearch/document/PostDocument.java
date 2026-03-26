@@ -1,5 +1,7 @@
 package com.backend.search.opensearch.document;
 
+import java.time.Instant;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
@@ -16,4 +18,6 @@ public class PostDocument {
   private String postId;
   private String content;
   private String visibility;
+  private Instant createdAt;
+  private Instant updatedAt;
 }

@@ -38,8 +38,10 @@ public class PostUpdatedEventHandler implements EventHandler {
             .postId(payload.getPostId())
             .content(payload.getContent())
             .visibility(payload.getVisibility())
+            .createdAt(payload.getCreatedAt())
+            .updatedAt(payload.getUpdatedAt())
             .build();
-    openSearchRepository.index(
+    openSearchRepository.upsert(
         openSearchConfig.getIndices().getPosts(), payload.getPostId(), document);
     log.info("Updated post in index: id={}", payload.getPostId());
   }

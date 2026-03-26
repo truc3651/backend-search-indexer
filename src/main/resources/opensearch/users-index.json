@@ -18,7 +18,9 @@
       "fullName": {
         "type": "text",
         "analyzer": "content_analyzer"
-      }
+      },
+      "createdAt": { "type": "date", "index": false },
+      "updatedAt": { "type": "date", "index": false }
     }
   }
 }

@@ -1,6 +1,5 @@
 package com.backend.search.config;
 
-import org.apache.kafka.common.TopicPartition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -12,9 +11,7 @@ import org.springframework.util.backoff.ExponentialBackOff;
 import com.fasterxml.jackson.core.JsonParseException;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Configuration
 @RequiredArgsConstructor
 public class KafkaConfig {
@@ -22,20 +19,8 @@ public class KafkaConfig {
 
   @Bean
   public CommonErrorHandler kafkaErrorHandler(KafkaTemplate<String, String> kafkaTemplate) {
-    DeadLetterPublishingRecoverer recoverer =
-        new DeadLetterPublishingRecoverer(
-            kafkaTemplate,
-            (record, exception) -> {
-              log.error(
-                  "Sending to DLQ — topic: {}, partition: {}, offset: {}, key: {}, error: {}",
-                  record.topic(),
-                  record.partition(),
-                  record.offset(),
-                  record.key(),
-                  exception.getMessage());
-              return new TopicPartition(
-                  indexerConfig.getTopics().getDeadLetter(), record.partition());
-            });
+    // Default destination: <originalTopic>.DLT (per-topic dead letter)
+    DeadLetterPublishingRecoverer recoverer = new DeadLetterPublishingRecoverer(kafkaTemplate);
 
     IndexerConfig.Retry retryConfig = indexerConfig.getRetry();
     ExponentialBackOff backOff = new ExponentialBackOff();

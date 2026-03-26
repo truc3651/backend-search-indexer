@@ -42,8 +42,13 @@ public class UserCdcEventHandler implements EventHandler {
     }
 
     UserDocument document =
-        UserDocument.builder().id(payload.getId()).fullName(payload.getFullName()).build();
-    openSearchRepository.index(
+        UserDocument.builder()
+            .id(payload.getId())
+            .fullName(payload.getFullName())
+            .createdAt(payload.getCreatedAt())
+            .updatedAt(payload.getUpdatedAt())
+            .build();
+    openSearchRepository.upsert(
         openSearchConfig.getIndices().getUsers(), String.valueOf(payload.getId()), document);
     log.info("Indexed user: id={}", payload.getId());
   }
