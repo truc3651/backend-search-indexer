@@ -1,0 +1,63 @@
+spring:
+  application:
+    name: backend-search-indexer
+
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      group-id: search-indexer
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      properties:
+        isolation.level: read_committed
+        max.poll.records: 100
+        max.poll.interval.ms: 300000
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      acks: all
+      properties:
+        enable.idempotence: true
+    listener:
+      concurrency: ${INDEXER_CONSUMER_CONCURRENCY:3}
+      ack-mode: record
+
+opensearch:
+  host: ${OPENSEARCH_HOST:localhost}
+  port: ${OPENSEARCH_PORT:9200}
+  scheme: ${OPENSEARCH_SCHEME:http}
+  username: ${OPENSEARCH_USERNAME:admin}
+  password: ${OPENSEARCH_PASSWORD:admin}
+  indices:
+    users: users
+    posts: posts
+
+indexer:
+  topics:
+    users: postgres.users.t_users
+    post-created: postCreated
+    post-updated: postUpdated
+    post-deleted: postDeleted
+    dead-letter: deadLetters
+  retry:
+    max-attempts: ${INDEXER_RETRY_MAX_ATTEMPTS:10}
+    initial-interval-ms: ${INDEXER_RETRY_INITIAL_INTERVAL:1000}
+    max-interval-ms: ${INDEXER_RETRY_MAX_INTERVAL:60000}
+    multiplier: ${INDEXER_RETRY_MULTIPLIER:2.0}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    root: INFO
+    com.backend.searchindexer: INFO
+    org.apache.kafka: WARN
+    org.opensearch: WARN

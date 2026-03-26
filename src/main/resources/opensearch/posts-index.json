@@ -1,0 +1,25 @@
+{
+  "settings": {
+    "number_of_shards": 2,
+    "number_of_replicas": 1,
+    "analysis": {
+      "analyzer": {
+        "content_analyzer": {
+          "type": "custom",
+          "tokenizer": "standard",
+          "filter": ["lowercase", "stop", "snowball"]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "postId": { "type": "keyword" },
+      "content": {
+        "type": "text",
+        "analyzer": "content_analyzer"
+      },
+      "visibility": { "type": "keyword" }
+    }
+  }
+}
